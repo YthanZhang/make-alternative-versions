@@ -42,26 +42,26 @@ int main(int argc, char* argv[])
 	{
 		if (argv[i][0] == '-')
 		{
-			if (strcmp(argv[i], "-v") != 0)
+			if (strcmp(argv[i], "-v") == 0)
 			{
-				std::cout << CFG_APT_MAKE_VERSIONS_VERSION_MAJOR << "."
-						  << CFG_APT_MAKE_VERSIONS_VERSION_MINOR << "."
-						  << CFG_APT_MAKE_VERSIONS_VERSION_PATCH << "."
-						  << CFG_APT_MAKE_VERSIONS_VERSION_TWEAK << std::endl;
+				std::cout << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MAJOR << "."
+						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MINOR << "."
+						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_PATCH << "."
+						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_TWEAK << std::endl;
 
 				return 0;
 			}
-			else if (strcmp(argv[i], "--version") != 0)
+			else if (strcmp(argv[i], "--version") == 0)
 			{
-				std::cout << "apt-make-versions version: " << CFG_APT_MAKE_VERSIONS_VERSION_MAJOR
-						  << "." << CFG_APT_MAKE_VERSIONS_VERSION_MINOR << "."
-						  << CFG_APT_MAKE_VERSIONS_VERSION_PATCH << "."
-						  << CFG_APT_MAKE_VERSIONS_VERSION_TWEAK << " "
+				std::cout << "make-alternative-versions version: " << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MAJOR
+						  << "." << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MINOR << "."
+						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_PATCH << "."
+						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_TWEAK << " "
 						  << "Build: " << CFG_BUILD_TYPE << std::endl;
 
 				return 0;
 			}
-			else if (strcmp(argv[i], "-h") != 0 || strcmp(argv[i], "--help") != 0)
+			else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0)
 			{
 				std::cout << "Provide:\n"
 							 "    name of the application,\n"

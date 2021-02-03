@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(make-alternative-versions VERSION 0.0.0.2)
+project(make-alternative-versions VERSION 0.0.0.3)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -21,7 +21,7 @@ include_directories(
         src
         third-party
 )
-add_executable(apt_make_versions
+add_executable(make-alternative-versions
         src/main.cpp
 
         cmakeConfig.hpp src/cmakeConfig.hpp.in src/myExceptions.hpp)
@@ -51,4 +51,4 @@ set(CMAKE_C_FLAGS_RELEASE "-g -O3 -flto -Wl,-flto")
 
 # Pass info to cmakeConfig.hpp
 configure_file(${BASE_DIR}/src/cmakeConfig.hpp.in ${PROJECT_BINARY_DIR}/cmakeConfig.hpp)
-target_include_directories(apt_make_versions PUBLIC "${PROJECT_BINARY_DIR}")
+target_include_directories(make-alternative-versions PUBLIC "${PROJECT_BINARY_DIR}")
