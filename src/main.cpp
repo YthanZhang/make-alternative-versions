@@ -12,7 +12,7 @@
 struct appInfo
 {
 	std::string name;
-	std::string endFile;
+	std::string linkTarget;
 	std::string sourceFile;
 };
 
@@ -84,22 +84,22 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	appInfo		mainApp;
+	appInfo		master;
 	std::string appPriority;
 
 	std::string haveSlaveStr;
 	bool		haveSlave;
 
-	std::vector<appInfo> slaveApps;
+	std::vector<appInfo> slaves;
 
-	std::cout << "Name of app: ";
-	getline(std::cin, mainApp.name);
+	std::cout << "Name of App: ";
+	getline(std::cin, master.name);
 
-	std::cout << "End file: ";
-	getline(std::cin, mainApp.endFile);
+	std::cout << "Master link target: ";
+	getline(std::cin, master.linkTarget);
 
-	std::cout << "Source file: ";
-	getline(std::cin, mainApp.sourceFile);
+	std::cout << "Master source file: ";
+	getline(std::cin, master.sourceFile);
 
 	std::cout << "App priority: ";
 	getline(std::cin, appPriority);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 	{
 		try
 		{
-			std::cout << "Have slave?(Yes/[No]): ";
+			std::cout << "Have slave?(Yes/No): ";
 			getline(std::cin, haveSlaveStr);
 
 			haveSlave = getYesNo(haveSlaveStr);
@@ -122,15 +122,15 @@ int main(int argc, char* argv[])
 
 		if (haveSlave)
 		{
-			slaveApps.emplace_back();
+			slaves.emplace_back();
 			std::cout << "Name of slave: ";
-			getline(std::cin, slaveApps.back().name);
+			getline(std::cin, slaves.back().name);
 
-			std::cout << "End file: ";
-			getline(std::cin, slaveApps.back().endFile);
+			std::cout << "Slave link target: ";
+			getline(std::cin, slaves.back().linkTarget);
 
-			std::cout << "Source file: ";
-			getline(std::cin, slaveApps.back().sourceFile);
+			std::cout << "Slave source file: ";
+			getline(std::cin, slaves.back().sourceFile);
 		}
 		else
 		{
@@ -140,18 +140,18 @@ int main(int argc, char* argv[])
 
 	// Use info to run update-alternatives
 	std::string commandString = "update-alternatives --install ";
-	commandString.append(mainApp.endFile)
+	commandString.append(master.linkTarget)
 		.append(" ")
-		.append(mainApp.name)
+		.append(master.name)
 		.append(" ")
-		.append(mainApp.sourceFile)
+		.append(master.sourceFile)
 		.append(" ")
 		.append(appPriority);
 
-	for (const auto& ele : slaveApps)
+	for (const auto& ele : slaves)
 	{
 		commandString.append(" --slave ")
-			.append(ele.endFile)
+			.append(ele.linkTarget)
 			.append(" ")
 			.append(ele.name)
 			.append(" ")

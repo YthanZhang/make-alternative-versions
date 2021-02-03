@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(make-alternative-versions VERSION 0.0.0.3)
+project(make-alternative-versions VERSION 0.0.0.4)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
