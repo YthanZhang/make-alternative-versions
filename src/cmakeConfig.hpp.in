@@ -1,0 +1,20 @@
+//
+// Created by ythan on 2021/2/3.
+//
+
+#ifndef __CMAKECONFIG_HPP__
+#define __CMAKECONFIG_HPP__
+
+//Version numbers
+#define CFG_APT_MAKE_VERSIONS_VERSION_MAJOR @apt_make_versions_VERSION_MAJOR@
+#define CFG_APT_MAKE_VERSIONS_VERSION_MINOR @apt_make_versions_VERSION_MINOR@
+#define CFG_APT_MAKE_VERSIONS_VERSION_PATCH @apt_make_versions_VERSION_PATCH@
+#define CFG_APT_MAKE_VERSIONS_VERSION_TWEAK @apt_make_versions_VERSION_TWEAK@
+
+// Build type
+#define CFG_CMAKE_BUILD_TYPE @CMAKE_BUILD_TYPE@
+#define CFG_BUILD_TYPE		 "@CMAKE_BUILD_TYPE@"
+#define CFG_DEBUG			 @DEBUG@
+#define CFG_RELEASE			 @RELEASE@
+
+#endif	  // __CMAKECONFIG_HPP__
