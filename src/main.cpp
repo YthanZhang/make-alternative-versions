@@ -39,17 +39,15 @@ int main(int argc, char* argv[])
 			}
 			else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0)
 			{
-				std::cout << "Provide:\n"
-							 "    name of the application,\n"
-							 "    where the link file should be(end file),\n"
-							 "    where the link file should point to(source "
-							 "file).\n\n"
-							 "If there are other associated file that should "
-							 "also be changed\n"
-							 " enter \"Y\" or \"yes\" when asked if have "
-							 "slave(default no).\n"
-							 " Then provide end files and source files "
-							 "location when prompted.\n";
+				std::cout << "Provide: name of the application and where the\n"
+							 "link file should be(link target).\n"
+							 "If there are other associated file that should\n"
+							 " also be changed enter \"y\" or \"yes\" when\n"
+							 " asked if have slave.\n"
+							 "Then provide link target and name when "
+							 "prompted.\n"
+							 "When asked if add new version, enter yes to add\n"
+							 " new version.\n";
 
 				return 0;
 			}
@@ -121,10 +119,10 @@ int main(int argc, char* argv[])
 
 	std::string commandString;
 	std::string line;
-	
+
 	const size_t appSize = appPriority.size();
-	
-	for(size_t i = 0; i < appSize; ++i)
+
+	for (size_t i = 0; i < appSize; ++i)
 	{
 		commandString = "update-alternatives --install ";
 		commandString.append(master.linkTarget)
@@ -134,7 +132,7 @@ int main(int argc, char* argv[])
 			.append(masterSources[i])
 			.append(" ")
 			.append(appPriority[i]);
-		
+
 		for (size_t j = 0; j < slavesSize; ++j)
 		{
 			commandString.append(" --slave ")
