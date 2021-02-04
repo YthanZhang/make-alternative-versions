@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(make-alternative-versions VERSION 0.0.0.4)
+project(make-alternative-versions VERSION 0.0.0.5)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -24,7 +24,11 @@ include_directories(
 add_executable(make-alternative-versions
         src/main.cpp
 
-        cmakeConfig.hpp src/cmakeConfig.hpp.in src/myExceptions.hpp)
+        cmakeConfig.hpp
+        src/cmakeConfig.hpp.in
+        src/myExceptions.hpp
+        src/utils.hpp
+)
 
 
 # Compiler/Linker Settings

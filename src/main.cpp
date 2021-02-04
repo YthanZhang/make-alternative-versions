@@ -6,6 +6,7 @@
 
 #include "cmakeConfig.hpp"
 #include "myExceptions.hpp"
+#include "utils.hpp"
 #include <pthread/pstream.h>
 
 
@@ -17,23 +18,6 @@ struct appInfo
 };
 
 
-bool getYesNo(std::string str)
-{
-	for (auto& ele : str) { ele = std::tolower(ele); }
-
-	if (str == "yes" || str == "y")
-	{
-		return true;
-	}
-	else if (str == "no" || str == "n")
-	{
-		return false;
-	}
-	else
-	{
-		throw mex::exceptionIllFormYesNo();
-	}
-}
 
 int main(int argc, char* argv[])
 {
@@ -54,9 +38,9 @@ int main(int argc, char* argv[])
 			else if (strcmp(argv[i], "--version") == 0)
 			{
 				std::cout << "make-alternative-versions version: " << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MAJOR
-						  << "." << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MINOR << "."
-						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_PATCH << "."
-						  << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_TWEAK << " "
+						  << "." << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_MINOR
+						  << "." << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_PATCH
+						  << "." << CFG_MAKE_ALTERNATIVE_VERSIONS_VERSION_TWEAK << " "
 						  << "Build: " << CFG_BUILD_TYPE << std::endl;
 
 				return 0;
@@ -112,7 +96,7 @@ int main(int argc, char* argv[])
 			std::cout << "Have slave?(Yes/No): ";
 			getline(std::cin, haveSlaveStr);
 
-			haveSlave = getYesNo(haveSlaveStr);
+			haveSlave = utl::getYesNo(haveSlaveStr);
 		}
 		catch (mex::exceptionIllFormYesNo& e)
 		{
@@ -177,7 +161,7 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "stderr: " << line << '\n';
 	}
-	
+
 	std::cout << "make app versions done." << std::endl;
 
 	return 0;
