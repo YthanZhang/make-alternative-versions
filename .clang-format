@@ -174,7 +174,7 @@ Standard: c++20
 TabWidth: 4
 
 UseCRLF: false
-UseTab: Always
+UseTab: Never
 
 # WhitespaceSensitiveMacros:
 
