@@ -10,14 +10,6 @@
 #include <pthread/pstream.h>
 
 
-struct appInfo
-{
-	std::string name;
-	std::string linkTarget;
-	std::string sourceFile;
-};
-
-
 
 int main(int argc, char* argv[])
 {
@@ -68,11 +60,9 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	appInfo		master;
-	std::string appPriority;
+	std::string commandStringPreview = "update-alternatives --install ";
 
-	std::string haveSlaveStr;
-	bool		haveSlave;
+	appInfo master;
 
 	std::vector<appInfo> slaves;
 
@@ -82,84 +72,97 @@ int main(int argc, char* argv[])
 	std::cout << "Master link target: ";
 	getline(std::cin, master.linkTarget);
 
-	std::cout << "Master source file: ";
-	getline(std::cin, master.sourceFile);
 
-	std::cout << "App priority: ";
-	getline(std::cin, appPriority);
-
-
-	while (true)
+	while (utl::quarryInputYesNo("Have slave?(Yes/No): "))
 	{
-		try
-		{
-			std::cout << "Have slave?(Yes/No): ";
-			getline(std::cin, haveSlaveStr);
+		slaves.emplace_back();
+		std::cout << "Name of slave: ";
+		getline(std::cin, slaves.back().name);
 
-			haveSlave = utl::getYesNo(haveSlaveStr);
-		}
-		catch (mex::exceptionIllFormYesNo& e)
+		std::cout << "Slave link target: ";
+		getline(std::cin, slaves.back().linkTarget);
+	}
+
+	std::cout << "Command preview: \n";
+	utl::alternativesCommandCoutPreview(master, slaves);
+
+	const size_t						  slavesSize = slaves.size();
+	std::vector<std::string>			  masterSources;
+	std::vector<std::string>			  appPriority;
+	std::vector<std::vector<std::string>> slavesSources;
+
+	while (utl::quarryInputYesNo("Add new version?(Yes/No): "))
+	{
+		masterSources.emplace_back();
+		appPriority.emplace_back();
+		slavesSources.emplace_back(slavesSize);
+
+		std::cout << "App priority: ";
+		getline(std::cin, appPriority.back());
+
+		std::cout << "Master source file: ";
+		getline(std::cin, masterSources.back());
+
+		for (size_t i = 0; i < slavesSize; ++i)
 		{
-			std::cout << "Please enter yes or no.\n";
-			continue;
+			std::cout << "Slave source file for " << slaves[i].name << ": ";
+			getline(std::cin, slavesSources.back()[i]);
 		}
 
-		if (haveSlave)
-		{
-			slaves.emplace_back();
-			std::cout << "Name of slave: ";
-			getline(std::cin, slaves.back().name);
-
-			std::cout << "Slave link target: ";
-			getline(std::cin, slaves.back().linkTarget);
-
-			std::cout << "Slave source file: ";
-			getline(std::cin, slaves.back().sourceFile);
-		}
-		else
-		{
-			break;
-		}
+		std::cout << "Command preview:\n";
+		utl::alternativesCommandCoutPreview(master,
+											slaves,
+											appPriority.back(),
+											masterSources.back(),
+											slavesSources.back());
 	}
 
 	// Use info to run update-alternatives
-	std::string commandString = "update-alternatives --install ";
-	commandString.append(master.linkTarget)
-		.append(" ")
-		.append(master.name)
-		.append(" ")
-		.append(master.sourceFile)
-		.append(" ")
-		.append(appPriority);
 
-	for (const auto& ele : slaves)
-	{
-		commandString.append(" --slave ")
-			.append(ele.linkTarget)
-			.append(" ")
-			.append(ele.name)
-			.append(" ")
-			.append(ele.sourceFile);
-	}
-
-	redi::ipstream proc(commandString, redi::pstream::pstdout | redi::pstream::pstderr);
-
+	std::string commandString;
 	std::string line;
-	// read child's stdout
-	while (std::getline(proc.out(), line))
+	
+	const size_t appSize = appPriority.size();
+	
+	for(size_t i = 0; i < appSize; ++i)
 	{
-		std::cout << "stdout: " << line << '\n';
-	}
-	// if reading stdout stopped at EOF then reset the state:
-	if (proc.eof() && proc.fail())
-	{
-		std::cout << "make app failed.";
-		proc.clear();
-	}
-	// read child's stderr
-	while (std::getline(proc.err(), line))
-	{
-		std::cout << "stderr: " << line << '\n';
+		commandString = "update-alternatives --install ";
+		commandString.append(master.linkTarget)
+			.append(" ")
+			.append(master.name)
+			.append(" ")
+			.append(masterSources[i])
+			.append(" ")
+			.append(appPriority[i]);
+		
+		for (size_t j = 0; j < slavesSize; ++j)
+		{
+			commandString.append(" --slave ")
+				.append(slaves[j].linkTarget)
+				.append(" ")
+				.append(slaves[j].name)
+				.append(" ")
+				.append(slavesSources[i][j]);
+		}
+
+		redi::ipstream proc(commandString, redi::pstream::pstdout | redi::pstream::pstderr);
+
+		// read child's stdout
+		while (std::getline(proc.out(), line))
+		{
+			std::cout << "stdout: " << line << '\n';
+		}
+		// if reading stdout stopped at EOF then reset the state:
+		if (proc.eof() && proc.fail())
+		{
+			std::cout << "make app failed.";
+			proc.clear();
+		}
+		// read child's stderr
+		while (std::getline(proc.err(), line))
+		{
+			std::cout << "stderr: " << line << '\n';
+		}
 	}
 
 	std::cout << "make app versions done." << std::endl;
