@@ -58,8 +58,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::string commandStringPreview = "update-alternatives --install ";
-
     appInfo master;
 
     std::vector<appInfo> slaves;
@@ -94,13 +92,16 @@ int main(int argc, char* argv[])
         masterSources.emplace_back();
         appPriority.emplace_back();
         slavesSources.emplace_back(slavesSize);
-
+        
+        // get app priority
         std::cout << "App priority: ";
         getline(std::cin, appPriority.back());
-
+        
+        // get master source location
         std::cout << "Master source file: ";
         getline(std::cin, masterSources.back());
-
+    
+        // collect slaves sources
         for (size_t i = 0; i < slavesSize; ++i)
         {
             std::cout << "Slave source file for " << slaves[i].name << ": ";
